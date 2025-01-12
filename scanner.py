@@ -73,6 +73,13 @@ class Scanner:
 
             current_token += character
 
+        if current_token:
+            if self.symbol_table.authorize_token(current_token):
+                self._tokens.append(current_token)
+                current_token = ""
+            else:
+                raise FileProcessingException("SYNTAX ERROR", self._filename, lineno)
+
     def output_tokens(self) -> None:
         print(self._tokens)
 

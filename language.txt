@@ -15,5 +15,3 @@ STATE 0 {
 }
 
 STATE HALT {}
-
-STATE 2 INSERT a -> 0
