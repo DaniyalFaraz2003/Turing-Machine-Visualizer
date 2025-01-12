@@ -1,4 +1,3 @@
-from queue import LifoQueue, Empty
 from string import digits, ascii_letters
 
 
@@ -28,27 +27,34 @@ class ParseTable:
 class Parser:
     def __init__(self, tokens: list[str]) -> None:
         self._tokens: list[str] = tokens
-        self._stack: LifoQueue[str] = LifoQueue()
+        self._stack: list[str] = []
         self._parse_table: ParseTable = ParseTable()
 
     def validate(self) -> bool:
-        try:
-            if self._stack.get(block=False) == 'S':
+        if len(self._stack) > 0:
+            if self._stack[-1] == 'S':
                 return True
-        except Empty:
-            pass
-        
+
         return False
 
     def parse(self) -> None:
         pass
 
     def shift(self, token: str) -> None:
-        self._stack.put(token)
+        self._stack.append(token)
 
 
     def reduce(self, rule: str) -> bool:
-        pass
+        non_terminal: str = self._parse_table.inverse_production(rule)
+        if non_terminal == "":
+            return False
+
+        pop_count: int = len(rule.split(' '))
+        for _ in range(pop_count):
+            self._stack.pop()
+
+        self._stack.append(non_terminal)
+
 
 
 def main():
