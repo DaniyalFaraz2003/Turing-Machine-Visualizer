@@ -38,7 +38,10 @@ class Parser:
         return False
 
     def parse(self) -> None:
-        pass
+        token_idx: int = 0
+        while token_idx < len(self._tokens):
+            token: str = self._tokens[token_idx]
+            pass # to be continued
 
     def shift(self, token: str) -> None:
         self._stack.append(token)
