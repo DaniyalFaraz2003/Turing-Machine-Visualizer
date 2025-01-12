@@ -31,7 +31,7 @@ class Scanner:
     def __init__(self) -> None:
         self._source_code: str = ""
         self._filename: str = ""
-        self._tokens: list[tuple[str, str]] = []
+        self._tokens: list[str] = []
         self._current_idx: int = 0
         self.symbol_table: SymbolTable = SymbolTable()
 
