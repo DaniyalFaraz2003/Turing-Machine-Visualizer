@@ -5,30 +5,41 @@ Keywords:
     LOOP -> keyword to define a Loop
     STATEMENT -> keyword to define a Statement
 
-Structure of Statement:
-    S -> STATEMENT (characterRead,replacingCharacter,direction) -> stateName;
-    characterRead -> a-z | 0-9 | / | $ | *
-    replacingCharacter -> a-z | 0-9 | / | $ | *
-    direction -> l | r
-    stateName -> digit | START | HALT
-    digit -> 1-9D | 0-9
-    D -> DD | 0-9
-
-Structure of Loop:
-    S -> LOOP {A}
-    A -> AA | STATEMENT
-
-Structure of State:
-    S -> STATE stateName {A} | STATE stateName INSERT character -> stateName | STATE stateName DELETE -> stateName | STATE HALT {}
-    stateName -> digit | START
-    digit -> 1-9D | 0-9
-    D -> DD | 0-9
-    A -> AA | LOOP | STATEMENT
-    character -> a-z | 0-9 | / | $ | *
-
 Language Rules:
     -> HALT state should not have any statements, that is, should be empty.
-    -> Each state, other than HALT state, must have atleast one STATEMENT showing transition to another state, that is, statement outside loop.
+    -> Each state, other than HALT state which should be empty, must have atleast one STATEMENT showing transition to another state, that is, statement outside loop.
     -> The STATEMENT outside LOOP should not have stateName same as the state containing it.
     -> stateName should be a valid stateName, that is, defined in the language.
     -> stateName of STATEMENT in LOOP sould be equal to the stateName of the state containing it.
+
+
+Total CFG of the language:
+
+variables: [
+    (S -> start symbol)
+    (Q -> start state)
+    (Z -> halt state)
+    (E -> normal state)
+    (T -> statement)
+    (L -> loop)
+    (N -> state name)
+    (C -> character)
+    (D -> digit)
+    (X -> direction)
+    (B -> next state)
+]
+
+
+
+
+S -> QZ | QEZ
+Q -> STATE START {TL} | STATE START INSERT C -> B; | STATE START DELETE -> B; |
+Z -> STATE HALT {}
+E -> EE | STATE N {TL} | STATE N INSERT C -> B; | STATE N DELETE -> B;
+L -> LOOP {T} | e
+T -> TT | STATEMENT (C,C,X) -> B;
+N -> [1-9]D | [0-9]
+D -> DD | [0-9]
+C -> [a-z] | [0-9] | / | $ | *
+X -> l | r
+B -> N | START | HALT

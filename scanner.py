@@ -83,9 +83,9 @@ def main():
     scanner.load_source_code("language.txt")
     try:
         scanner.tokenize()
+        scanner.output_tokens()
     except FileProcessingException as e:
         print(e)
-    scanner.output_tokens()
 
 if __name__ == "__main__":
     main()
