@@ -23,7 +23,6 @@ class SymbolTable:
         if token == "->":
             return True
     
-        
         return False
         
 
