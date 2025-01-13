@@ -6,7 +6,7 @@ from file_processing_error import FileProcessingException
 class ParseTable:
     def __init__(self) -> None:
         self._PARSE_TABLE: dict[str, list[str]] = {
-            'S': ["Q Z", "Q E Z", "Q E Z E", "E Q Z E", "E Q E Z E", "E Q E Z"],
+            'S': ["Q Z", "Q E Z", "Q E Z E", "E Q Z E", "E Q E Z E", "E Q E Z", "S E"],
             'Q': [r"STATE START { T L }", r"STATE START { L T }", r"STATE START { T L T }", r"STATE START { T }", "STATE START INSERT C -> B ;", "STATE START DELETE -> B ;"],
             'Z': [r"STATE HALT { }"],
             'E': ["E E", r"STATE B { T }", r"STATE B { T L }", r"STATE B { L T }", r"STATE B { T L T }", "STATE B INSERT C -> B ;", "STATE B DELETE -> B ;"],
@@ -52,14 +52,14 @@ class Parser:
                     self._tokens[token_idx + 1] = 'C'
 
             if look_ahead == "{" and (token == "START" or token == "HALT"):
-                if re.match(r"^\([a-zA-Z0-9],[a-zA-Z0-9],[lr]\)$", token):
+                if re.match(r"^\([a-zA-Z0-9/\$\*],[a-zA-Z0-9/\$\*],[lr]\)$", token):
                     self.shift("(C,C,X)")
                 else:
                     self.shift(token)
                 token_idx += 1
                 continue
 
-            if re.match(r"^\([a-zA-Z0-9],[a-zA-Z0-9],[lr]\)$", token):
+            if re.match(r"^\([a-zA-Z0-9/\$\*],[a-zA-Z0-9/\$\*],[lr]\)$", token):
                 self.shift("(C,C,X)")
             else:
                 self.shift(token)

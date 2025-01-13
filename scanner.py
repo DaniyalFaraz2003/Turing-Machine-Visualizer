@@ -11,7 +11,7 @@ class SymbolTable:
         if token.lower() in self._KEYWORDS:
             return True
         
-        if re.match(r"^\([a-zA-Z0-9],[a-zA-Z0-9],[lr]\)$", token):
+        if re.match(r"^\([a-zA-Z0-9/\$\*],[a-zA-Z0-9/\$\*],[lr]\)$", token):
             return True
         
         if token in list(ascii_letters + digits + "*$/"): 

@@ -1,19 +1,18 @@
 STATE START {
-    STATEMENT (a,b,l) -> 12;
-    STATEMENT (a,a,r) -> 32;
-}
-
-
-STATE 0 {
-    STATEMENT (a,b,l) -> 1;
     STATEMENT (a,a,r) -> 2;
-    LOOP {
-        STATEMENT (b,a,r) -> 0;
-        STATEMENT (a,a,l) -> 0;
-    }
-    STATEMENT (b,b,l) -> HALT;
+    STATEMENT (b,b,r) -> 2;
 }
 
-STATE 23 INSERT A -> 32;
+STATE 2 {
+    STATEMENT (b,b,r) -> 3;
+}
+
+STATE 3 {
+    LOOP {
+        STATEMENT (a,a,r) -> 3;
+        STATEMENT (b,b,r) -> 3;
+    }
+    STATEMENT (/,/,r) -> HALT;
+}
 
 STATE HALT {}
