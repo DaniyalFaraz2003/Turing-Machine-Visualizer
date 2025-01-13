@@ -1,5 +1,7 @@
 from string import digits, ascii_letters
 import re
+from scanner import Scanner
+from file_processing_error import FileProcessingException
 
 class ParseTable:
     def __init__(self) -> None:
@@ -44,6 +46,11 @@ class Parser:
         while token_idx < len(self._tokens):
             token: str = self._tokens[token_idx]
             look_ahead: str = self._tokens[token_idx + 1] if token_idx + 1 < len(self._tokens) else ""
+            
+            if token == "INSERT":
+                if look_ahead:
+                    self._tokens[token_idx + 1] = 'C'
+
             if look_ahead == "{" and (token == "START" or token == "HALT"):
                 if re.match(r"^\([a-zA-Z0-9],[a-zA-Z0-9],[lr]\)$", token):
                     self.shift("(C,C,X)")
@@ -95,8 +102,19 @@ class Parser:
 
 
 def main():
-    parser: Parser = Parser(['STATE', 'START', '{', 'STATEMENT', '(a,b,l)', '->', '1', ';', 'STATEMENT', '(a,a,r)', '->', '2', ';', '}', 'STATE', '0', '{', 'STATEMENT', '(a,b,l)', '->', '1', ';', 'STATEMENT', '(a,a,r)', '->', '2', ';', 'LOOP', '{', 'STATEMENT', '(b,a,r)', '->', '0', ';', 'STATEMENT', '(a,a,l)', '->', '0', ';', '}', 'STATEMENT', '(b,b,l)', '->', 'HALT', ';', '}', 'STATE', 'HALT', '{', '}'])
+    scanner: Scanner = Scanner()
+    scanner.load_source_code("language.txt")
+    tokens = None
+    try:
+        scanner.tokenize()
+        scanner.output_tokens()
+        tokens = scanner.get_tokens()
+    except FileProcessingException as e:
+        print(e)
 
+    print()
+    
+    parser: Parser = Parser(tokens)
     parser.parse()
     parser.output_stack()
 

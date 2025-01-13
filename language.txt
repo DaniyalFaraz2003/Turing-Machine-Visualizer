@@ -14,4 +14,6 @@ STATE 0 {
     STATEMENT (b,b,l) -> HALT;
 }
 
+STATE 23 INSERT A -> 32;
+
 STATE HALT {}

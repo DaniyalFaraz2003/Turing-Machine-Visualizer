@@ -80,6 +80,9 @@ class Scanner:
             else:
                 raise FileProcessingException("SYNTAX ERROR", self._filename, lineno)
 
+    def get_tokens(self) -> list[str]:
+        return self._tokens
+
     def output_tokens(self) -> None:
         print(self._tokens)
 
