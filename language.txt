@@ -1,6 +1,6 @@
 STATE START {
-    STATEMENT (a,b,l) -> 1;
-    STATEMENT (a,a,r) -> 2;
+    STATEMENT (a,b,l) -> 12;
+    STATEMENT (a,a,r) -> 32;
 }
 
 
