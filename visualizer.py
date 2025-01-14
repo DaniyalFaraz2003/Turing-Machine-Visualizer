@@ -1,7 +1,7 @@
 # Example file showing a circle moving on screen
 import pygame
 from string import ascii_lowercase
-
+from compiler import Compiler
 from prompt_toolkit.key_binding.bindings.scroll import scroll_one_line_down
 
 # pygame setup
@@ -20,6 +20,29 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 
 font=pygame.font.SysFont(None,int(BOX_SIZE // 1.5))
+
+class Button:
+    def __init__(self):
+        self.font = pygame.font.Font(None, 24)
+        self.surface = pygame.Surface((150, 50))
+        self.text = font.render("Automate Run", True, (0, 0, 0))
+        self.text_rect = self.text.get_rect(center=(self.surface.get_width()/2, self.surface.get_height()/2))
+        self.rect = pygame.Rect(125, 125, 150, 50)
+
+    def update(self):
+
+        if self.rect.collidepoint(pygame.mouse.get_pos()):
+            pygame.draw.rect(self.surface, (127, 255, 212), (1, 1, 148, 48))
+        else:
+            pygame.draw.rect(self.surface, (0, 0, 0), (0, 0, 150, 50))
+            pygame.draw.rect(self.surface, (255, 255, 255), (1, 1, 148, 48))
+            pygame.draw.rect(self.surface, (0, 0, 0), (1, 1, 148, 1), 2)
+            pygame.draw.rect(self.surface, (0, 100, 0), (1, 48, 148, 10), 2)
+
+    def draw(self, screen):
+        self.surface.blit(self.text, self.text_rect)
+        screen.blit(self.surface, (self.rect.x, self.rect.y))
+
 
 class Tape:
     def __init__(self, x, y):
@@ -72,8 +95,14 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.dt = 0
-
+        self.compiler = Compiler()
         self.tape = Tape(self.screen.get_width() / 2, self.screen.get_height() / 2)
+        self.button = Button()
+
+        # Automated testing
+        self.current_state = "START"
+        # self.compiler.compile("language.txt")
+        self.is_automate = False
 
     def run(self):
         while self.running:
@@ -97,8 +126,12 @@ class Game:
                 if key_name in set(ascii_lowercase) or key_name == '/':
                     self.tape.tape[self.tape.current_index] = key_name
 
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.button.rect.collidepoint(event.pos):
+                    self.is_automate = not self.is_automate
+
     def update(self):
-        pass
+        self.button.update()
 
     def draw(self):
         self.screen.fill("black")
@@ -106,6 +139,7 @@ class Game:
         output_img = font.render(self.output, True, WHITE)
         self.screen.blit(output_img, (0, HEIGHT - output_img.get_rect().height))
         self.tape.draw(self.screen)
+        self.button.draw(self.screen)
 
         pygame.display.flip()
         self.dt = self.clock.tick(60) / 1000
