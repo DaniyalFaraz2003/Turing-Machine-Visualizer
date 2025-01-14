@@ -82,6 +82,9 @@ class Scanner:
 
     def get_tokens(self) -> list[str]:
         return self._tokens
+    
+    def get_filename(self) -> str:
+        return self._filename
 
     def output_tokens(self) -> None:
         print(self._tokens)

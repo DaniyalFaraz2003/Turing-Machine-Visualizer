@@ -35,8 +35,8 @@ class Parser:
         self._parse_table: ParseTable = ParseTable()
 
     def validate(self) -> bool:
-        if len(self._stack) > 0:
-            if self._stack[-1] == 'S':
+        if len(self._stack) == 1:
+            if self._stack[0] == 'S':
                 return True
 
         return False
