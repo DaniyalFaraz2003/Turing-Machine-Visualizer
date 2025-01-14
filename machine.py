@@ -49,7 +49,7 @@ class Machine:
                 print(f"  {read_char} -> {transition}")
             print()
 
-    def transition(self, current_state: str, current_char: str) -> tuple:
+    def transition(self, current_state: str, current_char: str) -> tuple[str]:
         transition: tuple[str] = self._transition_table[current_state][current_char]
         return transition
 

@@ -46,7 +46,7 @@ class Button:
 
 class Tape:
     def __init__(self, x, y):
-        self.tape_length = 20
+        self.tape_length = 100
         self.tape = ['/' for _ in range(self.tape_length)]
         self.current_index = len(self.tape) // 2
         self.box_dimensions = (BOX_SIZE, BOX_SIZE)
@@ -101,7 +101,7 @@ class Game:
 
         # Automated testing
         self.current_state = "START"
-        # self.compiler.compile("language.txt")
+        self.compiler.compile("language.txt")
         self.is_automate = False
 
     def run(self):
@@ -132,6 +132,16 @@ class Game:
 
     def update(self):
         self.button.update()
+
+        if self.is_automate:
+            if not self.current_state == "HALT":
+                output_char, direction, next_state = self.compiler.update(self.current_state, self.tape.tape[self.tape.current_index])
+                self.tape.tape[self.tape.current_index] = output_char
+                if direction == 'l':
+                    self.tape.move(-1)
+                elif direction == 'r':
+                    self.tape.move(1)
+                self.current_state = next_state
 
     def draw(self):
         self.screen.fill("black")
