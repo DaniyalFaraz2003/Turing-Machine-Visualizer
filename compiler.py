@@ -9,6 +9,9 @@ class Compiler:
         self._parser: Parser = None
         self._machine: Machine = None
 
+    def update(self, current_state: str, read_char: str) -> tuple[str]:
+        return self._machine.transition(current_state, read_char)
+
     def compile(self, file_path: str) -> None:
         self._scanner.load_source_code(file_path)
         tokens = None
@@ -34,3 +37,4 @@ class Compiler:
                 self._machine.out_transition_table()
         except FileProcessingException as e:
             print(e)
+

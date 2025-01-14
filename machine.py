@@ -49,6 +49,10 @@ class Machine:
                 print(f"  {read_char} -> {transition}")
             print()
 
+    def transition(self, current_state: str, current_char: str) -> tuple:
+        transition: tuple[str] = self._transition_table[current_state][current_char]
+        return transition
+
 def main():
     scanner: Scanner = Scanner()
     scanner.load_source_code("language.txt")
