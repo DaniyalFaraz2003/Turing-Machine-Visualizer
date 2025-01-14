@@ -1,37 +1,23 @@
 STATE START {
-    STATEMENT (a,A,r) -> 2;
+    LOOP {
+        STATEMENT (1,$,r) -> START;
+    }
+    STATEMENT (/,/,l) -> 1;
+}
+
+STATE 1 {
+    LOOP {
+        STATEMENT (1,1,l) -> 1;
+    }
+    STATEMENT ($,1,r) -> 2;
+    STATEMENT (/,/,r) -> HALT;
 }
 
 STATE 2 {
     LOOP {
-        STATEMENT (a,a,r) -> 2;
-        STATEMENT (B,B,r) -> 2;
+        STATEMENT (1,1,r) -> 2;
     }
-    STATEMENT (b,B,l) -> 3;
+    STATEMENT (/,1,l) -> 1;
 }
 
-STATE 3 {
-    LOOP {
-        STATEMENT (B,B,l) -> 3;
-    }
-    STATEMENT (a,a,l) -> 4;
-    STATEMENT (A,A,r) -> 5;
-}
-
-STATE 4 {
-    STATEMENT (A,A,r) -> START;
-    LOOP {
-        STATEMENT (a,a,l) -> 4;
-    }
-}
-
-STATE 5 {
-    LOOP {
-        STATEMENT (B,B,r) -> 5;
-    }
-    STATEMENT (/,/,r) -> HALT;
-}
-
-STATE HALT {
-
-}
+STATE HALT {}

@@ -1,6 +1,6 @@
 # Example file showing a circle moving on screen
 import pygame
-from string import ascii_lowercase
+from string import ascii_lowercase, digits
 from compiler import Compiler
 from prompt_toolkit.key_binding.bindings.scroll import scroll_one_line_down
 
@@ -98,6 +98,8 @@ class Game:
         self.compiler = Compiler()
         self.tape = Tape(self.screen.get_width() / 2, self.screen.get_height() / 2)
         self.button = Button()
+        self.last_update_time = 0  # Initialize timer
+        self.update_interval = 0.5  # Set delay in seconds
 
         # Automated testing
         self.current_state = "START"
@@ -123,7 +125,7 @@ class Game:
                     self.output += self.tape.tape[self.tape.current_index]
 
                 key_name = pygame.key.name(event.key)
-                if key_name in set(ascii_lowercase) or key_name == '/':
+                if key_name in set(ascii_lowercase) or key_name in set(digits) or key_name == '/':
                     self.tape.tape[self.tape.current_index] = key_name
 
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -134,14 +136,17 @@ class Game:
         self.button.update()
 
         if self.is_automate:
-            if not self.current_state == "HALT":
-                output_char, direction, next_state = self.compiler.update(self.current_state, self.tape.tape[self.tape.current_index])
-                self.tape.tape[self.tape.current_index] = output_char
-                if direction == 'l':
-                    self.tape.move(-1)
-                elif direction == 'r':
-                    self.tape.move(1)
-                self.current_state = next_state
+            if self.last_update_time >= self.update_interval:
+                if not self.current_state == "HALT":
+                    output_char, direction, next_state = self.compiler.update(self.current_state, self.tape.tape[self.tape.current_index])
+                    self.tape.tape[self.tape.current_index] = output_char
+                    if direction == 'l':
+                        self.tape.move(-1)
+                    elif direction == 'r':
+                        self.tape.move(1)
+                    self.current_state = next_state
+                
+                self.last_update_time = 0
 
     def draw(self):
         self.screen.fill("black")
@@ -153,6 +158,7 @@ class Game:
 
         pygame.display.flip()
         self.dt = self.clock.tick(60) / 1000
+        self.last_update_time += self.dt
 
 
 if __name__ == "__main__":
